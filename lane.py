@@ -43,7 +43,7 @@ def follow_lane():
     try:
         while True:
             gm_val_list = my_car.get_grayscale_data()
-            gm_state = my_car.get_line_status(gm_val_list)
+            gm_state = get_line_status(gm_val_list)
             print("gm_val_list: %s, %s"%(gm_val_list, gm_state))
 
             if gm_state != "stop":
@@ -63,3 +63,43 @@ def follow_lane():
                 outHandle(my_car)
     finally:
         my_car.stop()
+
+def get_line_status(self,fl_list):
+    #kvy5kor: this value is taken from modules.py. Adjust this based on the track settings
+    #REFERENCE_DEFAULT = [1000]*3
+    REFERENCE_DEFAULT = 500
+    reference = REFERENCE_DEFAULT
+    if (fl_list[0]) <= reference[0]:
+        Left = 1
+    else:
+        Left = 0
+    if (fl_list[1]) <= reference[1]:
+        Mid = 1
+    else:
+        Mid = 0
+    if (fl_list[2]) <= reference[2]:
+        Right = 1
+    else:
+        Right = 0
+    value = [Left, Mid, Right]
+
+    if value == [0, 1, 0] or value == [1, 1, 1]: #TODO : Here, car is on the line. Detect if it's left lane or right lane and decide the direction to move
+        direction = 'STOP'
+    elif value == [1, 0, 0] or value == [1, 1, 0]: # Here, car id close to the right lane, or it is on the right lane. so move left
+        print("car is close to the right lane, or it is on the right lane. so move left")
+        print("grayscale values:")
+        print(value)
+        direction = 'LEFT'
+    elif value == [0, 0, 1] or value == [0, 1, 1]:
+        print("car is close to the left lane, or it is on the left lane. so move right")
+        print("grayscale values:")
+        print(value)
+        direction = 'RIGHT'
+    elif value == [0, 0, 0]:
+        print("None of the sensors detect lane, so we are probably good to move forward")
+        print("grayscale values:")
+        print(value)
+        direction = 'FORWARD'
+
+    return direction
+

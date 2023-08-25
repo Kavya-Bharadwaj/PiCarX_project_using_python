@@ -20,7 +20,7 @@ DangerDistance = 20 # > 20 && < 30 turn around,
 
 # True return value indicates that there is an obstacle ahead, hence control
 # should come back to this function until the path ahead is clear
-def avoid_obstacle():
+def is_obstacle_exist():
     px = carinstance.my_car_instance
 
     
