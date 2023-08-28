@@ -8,18 +8,19 @@ import carinstance
 my_car = carinstance.my_car_instance
 
 # Move the car forward
-my_car.forward(10)
-lane.follow_lane()
+my_car.forward(carinstance.DEFAULT_POWER)
 
+
+print("-----------Starting the BOT-------------")
 # Main code
 try:
     while True:
-        while obstacle.is_obstacle_exist(my_car):
-            time.sleep(0.01)
+        #while obstacle.is_obstacle_exist():
+            #time.sleep(0.01)
 
         # Obstacle is cleared, resume lane following
         lane.follow_lane()
 
-        time.sleep(0.1)  # Adjust the delay as needed
+        #time.sleep(0.1)  # Adjust the delay as needed
 except KeyboardInterrupt:
     my_car.stop()
