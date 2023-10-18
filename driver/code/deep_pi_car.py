@@ -4,6 +4,7 @@ import cv2
 import datetime
 from picarx import Picarx
 from hand_coded_lane_follower import HandCodedLaneFollower
+import CameraCalibration
 #from objects_on_road_processor import ObjectsOnRoadProcessor
 
 _SHOW_IMAGE = False
@@ -54,7 +55,7 @@ class DeepPiCar(object):
         self.lane_follower = HandCodedLaneFollower(self.pibot)
         #self.traffic_sign_processor = ObjectsOnRoadProcessor(self)
         # lane_follower = DeepLearningLaneFollower()
-
+        self.calibration = CameraCalibration('data/camera_cal', 9, 6)
         self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
         datestr = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
         self.video_orig = self.create_video_recorder('../data/tmp/car_video%s.avi' % datestr)
@@ -130,6 +131,8 @@ class DeepPiCar(object):
         return image
 
     def follow_lane(self, image):
+        image = self.calibration.undistort(image)
+        show_image('Undistort image', image)
         image = self.lane_follower.follow_lane(image)
         return image
 
